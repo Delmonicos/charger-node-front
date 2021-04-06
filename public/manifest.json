@@ -1,6 +1,6 @@
 {
-  "short_name": "Substrate Front End",
-  "name": "Substrate Front End Template",
+  "short_name": "Delmonicos Node Front End",
+  "name": "Delmonicos Node Front End",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,6 +10,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#330000",
+  "background_color": "#FFCCCC"
 }
