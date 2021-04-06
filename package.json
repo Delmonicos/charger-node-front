@@ -5,7 +5,7 @@
   "author": "Parity Technologies <admin@parity.io>",
   "license": "Unlicense",
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "PORT=8080 react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "CI=true react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
