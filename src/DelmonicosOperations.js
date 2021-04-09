@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 
 import { Container, Grid, } from 'semantic-ui-react';
 import { useSubstrate } from './substrate-lib';
-import NewPaymentConsent from './NewPaymentConsent';
-
 
 import ChargersList from './delmonicos/ChargersList';
 import Payment from './delmonicos/Payment';
@@ -67,11 +65,6 @@ export default function Delmonicos({ accountPair }) {
         <Grid.Row stretched>
           <Grid.Column>
             <Payment selectedAccount={accountPair} />
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row stretched>
-          <Grid.Column>
-            <NewPaymentConsent accountPair={accountPair} />
           </Grid.Column>
         </Grid.Row>
 
