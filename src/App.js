@@ -53,7 +53,7 @@ function Main () {
     },
     {
       menuItem: 'Delmonicos',
-      render: () => tabContent(<DelmonicosOperations />)
+      render: () => tabContent(<DelmonicosOperations accountPair={accountPair} />)
     }
   ];
 

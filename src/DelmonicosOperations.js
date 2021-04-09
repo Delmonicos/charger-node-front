@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 
 import { Table, Container, Grid, } from 'semantic-ui-react';
 import { useSubstrate } from './substrate-lib';
+import NewPaymentConsent from './NewPaymentConsent';
+
 
 export default function Delmonicos({ accountPair }) {
   const { api, keyring } = useSubstrate();
@@ -17,8 +19,8 @@ export default function Delmonicos({ accountPair }) {
       const blockHash = await api.rpc.chain.getBlockHash(i);
       const events = await api.query.system.events.at(blockHash);
       events.forEach((e) => {
-        if(e.event.data.section === 'sessionPayment' 
-          || e.event.data.section === 'chargeSession' 
+        if(e.event.data.section === 'sessionPayment'
+          || e.event.data.section === 'chargeSession'
         ) {
           events.push(e.event.data);
         }
@@ -41,7 +43,7 @@ export default function Delmonicos({ accountPair }) {
         }))));
     }
   }, [chargerOrganization]);
-  
+
   useEffect(() => {
     api.query.chargeSession
       .chargerOrganization()
@@ -83,6 +85,12 @@ export default function Delmonicos({ accountPair }) {
             </Table>
           </Grid.Column>
         </Grid.Row>
+        <Grid.Row stretched>
+          <Grid.Column>
+            <NewPaymentConsent accountPair={accountPair} />
+          </Grid.Column>
+        </Grid.Row>
+
       </Grid>
     </Container>
   );
