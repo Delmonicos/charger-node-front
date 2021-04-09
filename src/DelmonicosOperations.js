@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
 
-import { Table, Container, Grid, } from 'semantic-ui-react';
+import { Container, Grid, } from 'semantic-ui-react';
 import { useSubstrate } from './substrate-lib';
 import NewPaymentConsent from './NewPaymentConsent';
 
+
+import ChargersList from './delmonicos/ChargersList';
+import Payment from './delmonicos/Payment';
 
 export default function Delmonicos({ accountPair }) {
   const { api, keyring } = useSubstrate();
   const [chargerOrganization, setChargerOrganization] = useState(null);
   const [chargers, setChargers] = useState([]);
 
-  const loadPastEvents = async () => {
+  /*const loadPastEvents = async () => {
     const lastBlock = await api.rpc.chain.getBlock();
     const lastBlockNum = lastBlock.block.header.number.toNumber();
     const events = [];
@@ -26,7 +29,7 @@ export default function Delmonicos({ accountPair }) {
         }
       });
     }
-  };
+  };*/
 
   useEffect(() => {
     if(chargerOrganization) {
@@ -55,34 +58,15 @@ export default function Delmonicos({ accountPair }) {
       <Grid stackable columns='equal'>
         <Grid.Row stretched>
           <Grid.Column>
-            <h1>Chargers</h1>
-            <div>
-              Organization:
-              &nbsp;
-              <code>{ chargerOrganization || '' }</code>
-            </div>
-            <Table celled striped size='small'>
-              <Table.Body>
-                <Table.Row>
-                  <Table.Cell width={4}>
-                    <strong>Address</strong>
-                  </Table.Cell>
-                  <Table.Cell width={8}>
-                    <strong>Name</strong>
-                  </Table.Cell>
-                </Table.Row>
-                { chargers.map(charger =>
-                  <Table.Row key={charger}>
-                    <Table.Cell>
-                      { charger.address }
-                    </Table.Cell>
-                    <Table.Cell>
-                      { charger.name }
-                    </Table.Cell>
-                  </Table.Row>
-                )}
-              </Table.Body>
-            </Table>
+            <ChargersList
+              organization={chargerOrganization}
+              chargers={chargers}
+            />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row stretched>
+          <Grid.Column>
+            <Payment selectedAccount={accountPair} />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row stretched>
