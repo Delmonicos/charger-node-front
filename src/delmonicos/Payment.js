@@ -73,8 +73,6 @@ const SaveConsent = ({ selectedAccount }) => {
 
     const message = stringToU8a(bic + iban);
     const signature = selectedAccount.sign(message);
-    const isValid = selectedAccount.verify(message, signature);
-    alert(u8aToHex(signature));
 
     api.tx.sessionPayment
       .newConsent(bic, iban, u8aToHex(signature))

@@ -1,16 +1,8 @@
-import {Button, Table} from 'semantic-ui-react';
+import {Button, Table, Modal, Header, Icon, Form, Input, Grid} from 'semantic-ui-react';
+import { useState } from 'react';
 import {stringToU8a, u8aToHex, hexToU8a} from "@polkadot/util";
 
 export default function PaymentConsentList({ consents }) {
-  const validate = (u) => {
-    const message = prompt('Please enter IBAN and Bic Code concatenated');
-    const signature = hexToU8a(u.sig);
-    const keypairs = keyring.getPairs();
-    const account = keypairs.find((k) => k.address === u.address);
-    const isValid = account.verify(message, signature);
-    alert(isValid);
-  };
-
   return (
     <div>
       <h1>Payment Consents</h1>
@@ -35,14 +27,73 @@ export default function PaymentConsentList({ consents }) {
                 { user.name }
               </Table.Cell>
               <Table.Cell>
-                <Button onClick={() => validate(user)}>
-                    Validate
-                </Button>
+                <VerifySignature consent={user}/>
               </Table.Cell>
             </Table.Row>
           )}
         </Table.Body>
       </Table>
     </div>
+  );
+};
+
+const VerifySignature= ({consent}) => {
+  const [open, setOpen] = useState(false)
+  const [bic, setBic] = useState('');
+  const [iban, setIban] = useState('');
+  const [verificationResult, setVerificationResult] = useState('');
+
+  const validate = () => {
+    const message = bic + iban;
+    const signature = hexToU8a(consent.sig);
+    const keypairs = keyring.getPairs();
+    const account = keypairs.find((k) => k.address === consent.address);
+    const isValid = account.verify(message, signature);
+    setVerificationResult('Résultat : ' + isValid);
+  };
+
+  return (
+      <Modal
+          onClose={() => setOpen(false)}
+          onOpen={() => setOpen(true)}
+          open={open}
+          trigger={<Button>Validate</Button>}
+      >
+        <Modal.Header>Consent Verification for {consent.name}</Modal.Header>
+        <Modal.Content>
+          <Modal.Description>
+            <Header>Enter the information you want to verify</Header>
+          </Modal.Description>
+          <Form>
+            <Form.Field>
+              <Input
+                  placeholder='BIC'
+                  value={bic}
+              />
+            </Form.Field>
+            <Form.Field>
+              <Input
+                  placeholder='IBAN'
+                  value={iban}
+              />
+            </Form.Field>
+          </Form>
+          <p>
+            {verificationResult}
+          </p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button
+              content="Validate"
+              labelPosition='right'
+              icon='checkmark'
+              onClick={() => validate()}
+              positive
+          />
+          <Button color='red' onClick={() => setOpen(false)}>
+            Close
+          </Button>
+        </Modal.Actions>
+      </Modal>
   );
 };
