@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Icon, Loader, Grid, Dropdown, Button, Form, Input } from 'semantic-ui-react'
 
 import { useSubstrate } from '../substrate-lib';
+import { stringToU8a, u8aToHex, u8aToString } from '@polkadot/util';
 
 const CheckConsent = () => {
   const { api, keyring } = useSubstrate();
@@ -60,17 +61,23 @@ const CheckConsent = () => {
 
 const SaveConsent = ({ selectedAccount }) => {
   const { api } = useSubstrate();
-  
+
   const [bic, setBic] = useState('');
   const [iban, setIban] = useState('');
   const [isConsentLoading, setConsentLoading] = useState(false);
   const [txStatus, setTxStatus] = useState(null);
-  
+
   const addConsent = () => {
     setTxStatus('pending');
     setConsentLoading(true);
+
+    const message = stringToU8a(bic + iban);
+    const signature = selectedAccount.sign(message);
+    const isValid = selectedAccount.verify(message, signature);
+    alert(u8aToHex(signature));
+
     api.tx.sessionPayment
-      .newConsent(bic, iban)
+      .newConsent(bic, iban, u8aToHex(signature))
       .signAndSend(
         selectedAccount,
         (res) => {
@@ -85,7 +92,7 @@ const SaveConsent = ({ selectedAccount }) => {
         }
       );
   };
-  
+
   return (
     <div style={{ marginTop: '20px'}}>
       <h5>

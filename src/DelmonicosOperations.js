@@ -6,6 +6,7 @@ import { useSubstrate } from './substrate-lib';
 import ChargersList from './delmonicos/ChargersList';
 import Payment from './delmonicos/Payment';
 import PaymentConsentList from "./delmonicos/PaymentConsentList";
+import { stringToU8a, u8aToHex, u8aToString } from '@polkadot/util';
 
 export default function Delmonicos({ accountPair }) {
   const { api, keyring } = useSubstrate();
@@ -59,11 +60,13 @@ export default function Delmonicos({ accountPair }) {
       const account = keypairs.find((k) => k.address === address);
       return (account?.meta?.name || '');
     };
+
     api.query.sessionPayment
         .allowedUsers()
         .then((consents)=> setConsents((consents.map((a) => ({
-          address: a.toString(),
-          name: getAccountName(a.toString()),
+          address: a[0].toString(),
+          name: getAccountName(a[0].toString()),
+          sig: a[1].toString()
         })))));
   }, []);
 
