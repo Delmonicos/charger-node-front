@@ -68,8 +68,12 @@ const VerifySignature= ({consent}) => {
       >
         <Modal.Header>Consent Verification for {consent.name}</Modal.Header>
         <Modal.Content>
+          <p>
+            Stored signature : <small>{consent.sig}</small>
+          </p>
           <Modal.Description>
             <Header>Enter the information you want to verify</Header>
+            <p/>
           </Modal.Description>
           <Form>
             <Form.Field>
