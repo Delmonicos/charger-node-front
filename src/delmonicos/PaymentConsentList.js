@@ -52,10 +52,17 @@ const VerifySignature= ({consent}) => {
     setVerificationResult('Résultat : ' + isValid);
   };
 
+  const openDialog= () => {
+    setBic('');
+    setIban('');
+    setVerificationResult('');
+    setOpen(true);
+  };
+
   return (
       <Modal
           onClose={() => setOpen(false)}
-          onOpen={() => setOpen(true)}
+          onOpen={() => openDialog()}
           open={open}
           trigger={<Button>Validate</Button>}
       >
@@ -69,12 +76,14 @@ const VerifySignature= ({consent}) => {
               <Input
                   placeholder='BIC'
                   value={bic}
+                  onChange={(_,{ value }) => setBic(value)}
               />
             </Form.Field>
             <Form.Field>
               <Input
                   placeholder='IBAN'
                   value={iban}
+                  onChange={(_,{ value }) => setIban(value)}
               />
             </Form.Field>
           </Form>
