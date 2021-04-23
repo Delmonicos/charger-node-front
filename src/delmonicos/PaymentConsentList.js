@@ -16,8 +16,7 @@ export default function Main(props) {
         };
 
         api.query.sessionPayment
-            .allowedUsers()
-            .then((consents) => setConsents((consents.map((a) => ({
+            .allowedUsers((consents) => setConsents((consents.map((a) => ({
                 address: a[0].toString(),
                 name: getAccountName(a[0].toString()),
                 sig: a[1].toString()
