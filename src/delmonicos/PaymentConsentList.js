@@ -1,8 +1,32 @@
 import {Button, Table, Modal, Header, Icon, Form, Input, Grid} from 'semantic-ui-react';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {stringToU8a, u8aToHex, hexToU8a} from "@polkadot/util";
+import {useSubstrate} from "../substrate-lib";
 
-export default function PaymentConsentList({consents}) {
+export default function Main(props) {
+    const {api, keyring} = useSubstrate();
+    const [consents, setConsents] = useState([]);
+
+    useEffect(() => {
+        let unsubscribeAll = null;
+        const keypairs = keyring.getPairs();
+        const getAccountName = (address) => {
+            const account = keypairs.find((k) => k.address === address);
+            return (account?.meta?.name || '');
+        };
+
+        api.query.sessionPayment
+            .allowedUsers()
+            .then((consents) => setConsents((consents.map((a) => ({
+                address: a[0].toString(),
+                name: getAccountName(a[0].toString()),
+                sig: a[1].toString()
+            }))))).then(unsub => {
+            unsubscribeAll = unsub;
+        }).catch(console.error);
+        return () => unsubscribeAll && unsubscribeAll();
+    }, [api, keyring, setConsents]);
+
     return (
         <div>
             <h1>Payment Consents</h1>
@@ -113,7 +137,8 @@ const VerifySignature = ({consent}) => {
                         </Form.Field>
                     </Form>
                     <div style={{width: '100%'}}>
-                        <Icon style={{display: 'block', marginRight: 'auto', marginLeft: 'auto'}} color={iconColor} name={iconName} size='huge'/>
+                        <Icon style={{display: 'block', marginRight: 'auto', marginLeft: 'auto'}} color={iconColor}
+                              name={iconName} size='huge'/>
                     </div>
                 </div>
             </Modal.Content>

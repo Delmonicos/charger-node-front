@@ -8,6 +8,9 @@ import ChainOperations from './ChainOperations';
 import DelmonicosOperations from './DelmonicosOperations';
 
 import AccountSelector from './AccountSelector';
+import NodeInfo from "./NodeInfo";
+import Metadata from "./Metadata";
+import BlockNumber from "./BlockNumber";
 
 function Main () {
   const [accountAddress, setAccountAddress] = useState(null);
@@ -63,6 +66,15 @@ function Main () {
         <AccountSelector setAccountAddress={setAccountAddress} />
       </Sticky>
       <Container>
+        <Grid stackable columns='equal'>
+          <Grid.Row stretched>
+            <NodeInfo />
+            <Metadata />
+            <BlockNumber />
+            <BlockNumber finalized />
+          </Grid.Row>
+        </Grid>
+        <p/>
         <Tab panes={tabs} />
       </Container>
     </div>

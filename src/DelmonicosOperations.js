@@ -6,13 +6,12 @@ import { useSubstrate } from './substrate-lib';
 import ChargersList from './delmonicos/ChargersList';
 import Payment from './delmonicos/Payment';
 import PaymentConsentList from "./delmonicos/PaymentConsentList";
-import { stringToU8a, u8aToHex, u8aToString } from '@polkadot/util';
+
 
 export default function Delmonicos({ accountPair }) {
   const { api, keyring } = useSubstrate();
   const [chargerOrganization, setChargerOrganization] = useState(null);
   const [chargers, setChargers] = useState([]);
-  const [consents, setConsents] = useState([]);
 
   /*const loadPastEvents = async () => {
     const lastBlock = await api.rpc.chain.getBlock();
@@ -54,21 +53,7 @@ export default function Delmonicos({ accountPair }) {
       .then((org)=> setChargerOrganization(org.toString()));
   }, []);
 
-  useEffect(() => {
-    const keypairs = keyring.getPairs();
-    const getAccountName = (address) => {
-      const account = keypairs.find((k) => k.address === address);
-      return (account?.meta?.name || '');
-    };
 
-    api.query.sessionPayment
-        .allowedUsers()
-        .then((consents)=> setConsents((consents.map((a) => ({
-          address: a[0].toString(),
-          name: getAccountName(a[0].toString()),
-          sig: a[1].toString()
-        })))));
-  }, []);
 
   return (
     <Container>
@@ -86,7 +71,7 @@ export default function Delmonicos({ accountPair }) {
             <Payment selectedAccount={accountPair} />
           </Grid.Column>
           <Grid.Column>
-            <PaymentConsentList consents={consents} />
+            <PaymentConsentList />
           </Grid.Column>
         </Grid.Row>
 
