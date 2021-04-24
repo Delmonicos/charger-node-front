@@ -64,8 +64,7 @@ function Main () {
     <div ref={contextRef}>
       <Sticky context={contextRef}>
         <AccountSelector setAccountAddress={setAccountAddress} />
-      </Sticky>
-      <Container>
+        <Container>
         <Grid stackable columns='equal'>
           <Grid.Row stretched>
             <NodeInfo />
@@ -74,7 +73,10 @@ function Main () {
             <BlockNumber finalized />
           </Grid.Row>
         </Grid>
-        <p/>
+        </Container>
+      </Sticky>
+      <p/>
+      <Container>
         <Tab panes={tabs} />
       </Container>
     </div>
